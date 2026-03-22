@@ -167,7 +167,7 @@ export default function Home() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Paste transcript text here…"
-            rows={14}
+            rows={7}
             className="w-full resize-y rounded-lg border border-neutral-300 bg-white p-3 text-sm leading-relaxed outline-none ring-neutral-400 focus:ring-2 dark:border-neutral-600 dark:bg-neutral-950 dark:ring-neutral-600"
           />
         </section>
@@ -324,6 +324,17 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        <footer className="mt-10 border-t border-neutral-200 pt-6 text-center text-sm text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
+          <a
+            href="https://github.com/arpitragarwal/transcript-summarizer"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-neutral-700 underline underline-offset-2 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
+          >
+            GitHub
+          </a>
+        </footer>
       </div>
     </div>
   );
