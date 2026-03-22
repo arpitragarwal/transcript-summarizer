@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "next": "15.3.8",
     "openai": "^6.32.0",
     "react": "^19.0.0",
