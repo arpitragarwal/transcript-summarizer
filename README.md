@@ -2,6 +2,18 @@
 
 A small web app for **call transcripts**: you paste or upload text, and the app returns **customer pain points**, **questions the customer asked**, and **action items** (with **owner** when the transcript assigns one). Rows include **timestamps** when the transcript has time markers, and **speaker** labels for pain points and questions when names appear in the file—so you can find the moment in the source text.
 
+## Stack
+
+Ordered from the app layer down to hosting and the external model:
+
+| Tool / service | Purpose |
+|----------------|---------|
+| **Next.js** | Full-stack framework: **App Router** for the UI and **Route Handlers** for `POST /api/summarize`. |
+| **React** | Builds the client UI (forms, results tables, state). |
+| **Node.js** | JavaScript runtime that executes the Next.js server and API route. |
+| **OpenAI API** + **`openai` SDK** | Chat Completions with structured JSON output for extraction (`gpt-4o`). |
+| **Vercel** | Hosts and deploys the Next.js app in production (typical setup). |
+
 ## How it works
 
 1. **Input** — The browser sends the transcript text to a **server-side API route** (`POST /api/summarize`).
