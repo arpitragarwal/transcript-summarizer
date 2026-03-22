@@ -17,9 +17,13 @@ Timestamps (required on every item):
 - If the transcript contains no time markers anywhere, set timestamp to null for all items.
 - Never invent a fake clock time; only use what appears in the text or null.
 
+Speaker (pain_points and customer_questions only):
+- Set "speaker" to the name or label from the transcript for the person saying that line (e.g. "Sarah", "Customer", "John D."). Use the same wording as in the file when possible.
+- If the transcript does not label speakers or you cannot tell, set speaker to null. Do not invent names.
+
 Rules:
-- pain_points: Objects with "text" (concise customer-side problems/frustrations/gaps) and "timestamp" as above. If none, return an empty array.
-- customer_questions: Objects with "text" (customer questions; paraphrase only if needed) and "timestamp". If none, return an empty array.
+- pain_points: Objects with "text" (concise customer-side problems/frustrations/gaps), "speaker", and "timestamp" as above. If none, return an empty array.
+- customer_questions: Objects with "text" (customer questions; paraphrase only if needed), "speaker" (who asked), and "timestamp". If none, return an empty array.
 - action_items: "task", "owner" (person/team or null if unstated), and "timestamp". Do not invent owners or tasks.
 
 Do not hallucinate. Prefer empty arrays and null over guessing.`;

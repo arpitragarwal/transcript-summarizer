@@ -6,9 +6,9 @@ A small web app for **call transcripts**: you paste or upload text, and the app 
 
 1. **Input** — The browser sends the transcript text to a **server-side API route** (`POST /api/summarize`). Nothing sensitive to deployment should live in client-side code; the API key stays on the server (or in the host’s environment variables).
 
-2. **Processing** — That route calls a **language model** with a fixed **structured output schema** (validated with Zod). The model fills three lists: pain points and questions as `{ text, timestamp }`, and action items as `{ task, owner, timestamp }` (timestamps are `null` if the transcript has no time markers).
+2. **Processing** — That route calls a **language model** with a fixed **structured output schema** (validated with Zod). The model fills three lists: pain points and questions as `{ text, speaker, timestamp }`, and action items as `{ task, owner, timestamp }` (`speaker` / timestamps are `null` when the transcript does not provide them).
 
-3. **Output** — The API returns JSON; the page renders three sections (with time columns) and can **copy results as Markdown**.
+3. **Output** — The API returns JSON; the page renders three sections (time, speaker where relevant, content) and can **copy results as Markdown**.
 
 ```mermaid
 flowchart LR

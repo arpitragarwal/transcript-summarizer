@@ -7,16 +7,22 @@ function formatTs(ts: string | null): string {
   return ts?.trim() ? ts.trim() : "—";
 }
 
+function formatSpeaker(name: string | null): string {
+  return name?.trim() ? name.trim() : "—";
+}
+
 function toMarkdown(data: TranscriptAnalysis): string {
   const lines: string[] = [
     "## Pain points (customer)",
     ...data.pain_points.map(
-      (p) => `- **${formatTs(p.timestamp)}** ${p.text}`,
+      (p) =>
+        `- **${formatTs(p.timestamp)}** **${formatSpeaker(p.speaker)}** ${p.text}`,
     ),
     "",
     "## Questions asked by customer",
     ...data.customer_questions.map(
-      (q) => `- **${formatTs(q.timestamp)}** ${q.text}`,
+      (q) =>
+        `- **${formatTs(q.timestamp)}** **${formatSpeaker(q.speaker)}** ${q.text}`,
     ),
     "",
     "## Action items",
@@ -202,6 +208,9 @@ export default function Home() {
                         <th className="w-[7.5rem] shrink-0 px-3 py-2 text-left font-semibold">
                           Time
                         </th>
+                        <th className="w-[8rem] shrink-0 px-3 py-2 text-left font-semibold">
+                          Speaker
+                        </th>
                         <th className="px-3 py-2 text-left font-semibold">
                           Pain point
                         </th>
@@ -215,6 +224,9 @@ export default function Home() {
                         >
                           <td className="whitespace-nowrap px-3 py-2 align-top font-mono text-xs text-neutral-600 dark:text-neutral-400">
                             {row.timestamp?.trim() || "—"}
+                          </td>
+                          <td className="px-3 py-2 align-top text-neutral-700 dark:text-neutral-300">
+                            {row.speaker?.trim() || "—"}
                           </td>
                           <td className="px-3 py-2">{row.text}</td>
                         </tr>
@@ -239,6 +251,9 @@ export default function Home() {
                         <th className="w-[7.5rem] shrink-0 px-3 py-2 text-left font-semibold">
                           Time
                         </th>
+                        <th className="w-[8rem] shrink-0 px-3 py-2 text-left font-semibold">
+                          Speaker
+                        </th>
                         <th className="px-3 py-2 text-left font-semibold">
                           Question
                         </th>
@@ -252,6 +267,9 @@ export default function Home() {
                         >
                           <td className="whitespace-nowrap px-3 py-2 align-top font-mono text-xs text-neutral-600 dark:text-neutral-400">
                             {row.timestamp?.trim() || "—"}
+                          </td>
+                          <td className="px-3 py-2 align-top text-neutral-700 dark:text-neutral-300">
+                            {row.speaker?.trim() || "—"}
                           </td>
                           <td className="px-3 py-2">{row.text}</td>
                         </tr>

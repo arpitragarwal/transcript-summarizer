@@ -1,8 +1,9 @@
 import { z } from "zod";
 
-/** One line of extraction with a reference point in the transcript (same format as in the file, or null if none). */
+/** One line of extraction with speaker and time when the transcript provides them. */
 export const timestampedLineSchema = z.object({
   text: z.string(),
+  speaker: z.string().nullable(),
   timestamp: z.string().nullable(),
 });
 
