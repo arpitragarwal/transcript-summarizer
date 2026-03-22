@@ -1,0 +1,218 @@
+================================================================================
+                         MOCK CALL TRANSCRIPT
+              Flying Carpet Logistics — VP of Technology Meeting
+                       VERSION 3: BAD OUTCOME
+================================================================================
+
+Date:           March 26, 2026
+Duration:       30 minutes
+Format:         Video call (Microsoft Teams)
+
+PARTICIPANTS:
+  - Marcus Chen, VP of Technology, Flying Carpet Logistics
+  - Priya Kapoor, Director of Technology, Flying Carpet Logistics (Marcus's direct report)
+  - Jordan Ellis, Deployment Strategist, Magic AI
+
+================================================================================
+
+[00:00:00] JORDAN: Hey Marcus, hey Priya — thanks for making time today. 
+Appreciate you both jumping on.
+
+[00:00:06] MARCUS: Yeah. Let's get into it — I've got a hard stop at the half 
+hour.
+
+[00:00:10] JORDAN: Absolutely. So I wanted to start by getting your perspective 
+on how things are going. I know your team has been doing a lot on the AI side 
+and I want to make sure we're aligned with—
+
+[00:00:21] MARCUS: Let me just cut to it. I know you've been talking to the ops 
+team about expanding scope. I've heard the conversations happening. I want to be 
+upfront: I'm not interested in expanding what Magic AI does here. I think the 
+current setup is fine for what it is, and I want to keep the scope where it is.
+
+[00:00:42] JORDAN: I appreciate the directness. Can you help me understand 
+what's driving that? I want to make sure I'm hearing your concerns.
+
+[00:00:50] MARCUS: It's pretty simple. We're building our own AI capabilities. 
+We've got 30 agents in development across the shipment lifecycle. My team is 
+handling email, task automation, exception workflows — the full stack. We don't 
+need an external vendor creeping into territory we're already covering. And 
+frankly, when I hear that you're talking to the business side about email 
+capabilities and omnichannel and all that, it feels like you're trying to go 
+around my team.
+
+[00:01:22] JORDAN: That's not our intention at all. We—
+
+[00:01:25] MARCUS: Let me finish. I get that you have a business to run and you 
+want to grow the account. That's fine. But my job is to make sure our technology 
+strategy is coherent, and having an external vendor running parallel AI workflows 
+to what my team is building is the opposite of coherent. It creates confusion, it 
+creates dependency, and honestly it undermines the narrative that we can do this 
+ourselves.
+
+[00:01:50] JORDAN: I hear you, and I think that's a totally valid concern. I want 
+to be clear — we are not trying to compete with your team. The work your 
+engineering org is doing is impressive. What I was hoping to discuss today is 
+actually more narrow than that. I wanted to talk about improving the performance 
+of the voice workflows we're already running. Specifically—
+
+[00:02:12] MARCUS: You're going to ask for read access to CargoNet.
+
+[00:02:15] JORDAN: [pause] I was going to raise it as one option, yes. The Track 
+& Trace workflow is at 91% success but we think—
+
+[00:02:22] MARCUS: Not happening. CargoNet is our crown jewel. I'm not opening 
+up read access to a vendor so you can query our core system before every call. 
+That's a security surface I don't need, a dependency I don't want, and an 
+integration I'd have to maintain. The answer is no.
+
+[00:02:42] JORDAN: I understand the concern. What if we explored a model where 
+your team pushes us a limited data payload instead? You control—
+
+[00:02:50] MARCUS: Jordan, you're not hearing me. The issue isn't the mechanism. 
+The issue is that I don't want to deepen this integration. You're a voice vendor 
+making outbound calls. The calls work fine. I don't need them to work 4% better 
+at the cost of opening up our systems and creating a tighter coupling to an 
+external platform. The juice isn't worth the squeeze.
+
+[00:03:12] JORDAN: Okay. I respect that. Can I ask — putting integration aside 
+entirely — how are you feeling about the overall value of what we're delivering 
+today? The 70,000-plus calls a month, the Track & Trace performance, the other 
+workflows?
+
+[00:03:28] MARCUS: [pause] It's functional. It does what it says. My concern 
+isn't whether the calls work — it's whether this is the right long-term 
+architecture. We're moving toward a world where we build and own our agent 
+infrastructure end to end. Voice included. I'm not saying we're going to rip 
+out Magic AI tomorrow, but I need you to understand that my long-term vision 
+doesn't include external vendors running core operational workflows.
+
+[00:04:00] JORDAN: That's helpful context. When you say "voice included" — is 
+your team actively building voice agent capabilities?
+
+[00:04:08] MARCUS: We're evaluating it. We haven't started building yet, but 
+it's on the assessment list. There are several platforms we're looking at and 
+honestly, the underlying technology has gotten a lot more accessible. The 
+question for us is timing and priority.
+
+[00:04:25] PRIYA: To be fair, Marcus, the voice side is probably lower priority 
+than finishing the email rollout. We've got our hands full with the parsing 
+issues and the deliverability work. Adding voice infrastructure on top of that 
+would stretch the team pretty thin.
+
+[00:04:40] MARCUS: It's about sequencing, not capability. We'll get there.
+
+[00:04:45] JORDAN: Priya, you mentioned parsing and deliverability issues with 
+the email agents — is that—
+
+[00:04:50] MARCUS: That's an internal matter. I don't think it's relevant to this 
+conversation.
+
+[00:04:55] JORDAN: Fair enough. Marcus, let me ask this a different way. 
+Regardless of the long-term architecture question, you've got 70,000 calls a 
+month running through us right now at an 86% aggregate success rate. Your ops 
+team has been happy with the results — Track & Trace especially. What would you 
+want to see from us over the remaining contract period to feel good about the 
+partnership?
+
+[00:05:18] MARCUS: Honestly? Keep doing what you're doing. Don't try to expand. 
+Don't go around my team to the business side. Deliver the calls at the quality 
+levels you've committed to. And when the contract comes up, we'll evaluate 
+whether it still makes sense.
+
+[00:05:35] JORDAN: Got it. And on the evaluation — is there anything specific 
+we should be tracking or reporting on that would make that decision easier for 
+your team?
+
+[00:05:44] MARCUS: I think Priya has been getting the standard reports. Priya, 
+is there anything else you need from them?
+
+[00:05:50] PRIYA: The reports are fine. I wouldn't mind more granularity on the 
+failure cases — like, for the 9% that fail on Track & Trace, a breakdown of why 
+they're failing. That would actually be useful for us regardless.
+
+[00:06:04] JORDAN: We can absolutely do that. I'll put together a failure 
+analysis report for Track & Trace — categorized by failure reason — and get it 
+to you. Would the other workflows be useful too, or just Track & Trace for now?
+
+[00:06:17] PRIYA: Start with Track & Trace. If it's useful, we can expand.
+
+[00:06:21] JORDAN: Done. I'll have that to you by end of week.
+
+[00:06:25] MARCUS: Good. And Jordan — I want to circle back to something. I 
+know the ops team and some of the business folks have been enthusiastic about 
+doing more with you. I get it — your product works and they want more of it. 
+But technology decisions go through my org. I need you to respect that chain. If 
+your team is having conversations about expanded scope with people on the 
+business side, I need those to stop until we've had the internal alignment 
+conversation.
+
+[00:06:55] JORDAN: I understand. And to be transparent, we haven't been 
+proactively pitching expansion to the ops team — they've been coming to us with 
+requests. But I hear what you're saying. Going forward, if the business side 
+raises expansion ideas with us, I'll redirect them to have that conversation 
+through your org first. Does that work?
+
+[00:07:15] MARCUS: That works. I just need to not be surprised. If I hear from 
+Sarah that Magic AI is demoing email capabilities to her team and I wasn't 
+told, that's a problem.
+
+[00:07:26] JORDAN: Completely fair. No surprises. If anything like that comes up, 
+you'll hear from me first.
+
+[00:07:33] MARCUS: Good.
+
+[00:07:35] JORDAN: Marcus, I want to acknowledge something. I can tell that you 
+have a clear vision for where you want your technology organization to go, and 
+I respect that. My goal is not to get in the way of that. For the remaining 
+contract period, we'll focus on delivering excellent performance on the six 
+workflows we're running, we'll get Priya that failure analysis, and we'll 
+maintain clear communication through your team. If there's ever a point where 
+our work can support what your engineering org is building — even in a small 
+way — I'd love to have that conversation. But I'm not going to push it.
+
+[00:08:10] MARCUS: I appreciate that. And look — I'm not trying to be difficult 
+here. You guys deliver a fine service. This is about strategic direction for 
+our technology stack. Nothing personal.
+
+[00:08:22] JORDAN: I don't take it personally at all. It's your job to think 
+long-term about the architecture and I'd be concerned if you weren't asking 
+these questions.
+
+[00:08:31] MARCUS: Alright. Anything else?
+
+[00:08:33] JORDAN: One last thing — and this is genuinely just a question, not 
+a pitch. When your team does start evaluating voice agent infrastructure 
+internally, would it be useful for us to share what we've learned from running 
+70,000 calls a month in the logistics space? Carrier phone tree structures, 
+optimal call timing, voicemail detection patterns — stuff like that. That 
+knowledge is yours regardless of whether we continue working together. I'd 
+rather share it than hoard it.
+
+[00:09:02] MARCUS: [pause] That could be useful, actually. When the time comes.
+
+[00:09:08] PRIYA: Yeah, the carrier phone tree data would be interesting. We've 
+been thinking about how to handle that and it's a messier problem than it looks.
+
+[00:09:16] JORDAN: It really is. Happy to do a knowledge-sharing session whenever 
+your team wants it. No strings attached. Just let me know.
+
+[00:09:24] MARCUS: We'll keep that in our back pocket. Alright, I think we're 
+good here. Priya, anything else?
+
+[00:09:30] PRIYA: No, I think we're covered. Jordan, I'll look for the failure 
+analysis report by Friday.
+
+[00:09:36] JORDAN: You'll have it. Thanks again, both of you. I know this wasn't 
+the most comfortable conversation but I appreciate the directness. It helps me 
+do my job better.
+
+[00:09:46] MARCUS: Sure. Talk soon.
+
+[00:09:48] PRIYA: Bye Jordan.
+
+[00:09:50] JORDAN: Take care.
+
+[00:09:52] — Call ends.
+
+================================================================================

@@ -1,0 +1,310 @@
+================================================================================
+                         MOCK CALL TRANSCRIPT
+              Flying Carpet Logistics — VP of Technology Meeting
+                      VERSION 1: GOOD OUTCOME
+================================================================================
+
+Date:           March 26, 2026
+Duration:       30 minutes
+Format:         Video call (Microsoft Teams)
+
+PARTICIPANTS:
+  - Marcus Chen, VP of Technology, Flying Carpet Logistics
+  - Priya Kapoor, Director of Technology, Flying Carpet Logistics (Marcus's direct report)
+  - Jordan Ellis, Deployment Strategist, Magic AI
+
+================================================================================
+
+[00:00:00] JORDAN: Hey Marcus, hey Priya — thanks for making time today. I know 
+calendars are brutal right now so I appreciate you both being here.
+
+[00:00:08] MARCUS: Yeah, no problem. Priya's been closer to the integration side 
+so I wanted her in the room. Let's make good use of the time.
+
+[00:00:15] JORDAN: Absolutely. And actually that's a good segue — I wanted to be 
+upfront about what I'm hoping to get out of this. I'm not here to pitch anything. 
+I've been hearing really good things about what your engineering team has been 
+shipping lately, and I wanted to make sure I have current context on where you're 
+headed so we can make sure we're being additive, not redundant. So if it's okay 
+with you, I'd love to just start by hearing what's top of mind for your team 
+right now.
+
+[00:00:42] MARCUS: Sure. I mean, look — I'll be direct with you. We've got a 
+pretty aggressive roadmap on the AI side. the CEO has been clear that the technology 
+org needs to be the engine for how we scale without scaling headcount linearly. 
+So we've got about 30 agents in various stages of deployment across the shipment 
+lifecycle — email triage, automated status updates to shippers, exception handling 
+workflows. Priya's team specifically has been leading the email automation work.
+
+[00:01:18] JORDAN: That's a lot of ground to cover. Priya, what's been your 
+team's focus lately?
+
+[00:01:23] PRIYA: Yeah, we've got three email agents in production right now. One 
+handles inbound carrier emails for appointment confirmations, one does shipper 
+status update requests, and we just launched one for claims documentation intake. 
+We're building on top of CargoNet's data layer so everything stays in our 
+ecosystem.
+
+[00:01:45] JORDAN: That's really impressive — especially getting three into 
+production. A lot of teams I talk to are still stuck in the proof-of-concept loop. 
+What's been the hardest part of getting those live? Is it the model behavior or 
+more the integration plumbing?
+
+[00:02:02] PRIYA: Honestly, a bit of both. The business logic isn't that bad — we 
+know our data, we know the workflows. The painful part has been the communication 
+layer itself. Email parsing is messy. You've got carriers replying in every format 
+imaginable — some reply inline, some attach PDFs, some just write "see below" with 
+nothing below. And then the deliverability side — making sure our emails don't end 
+up in spam, managing reply threading, handling bounces. It's not glamorous work.
+
+[00:02:35] JORDAN: Yeah, that tracks with what I've seen across the industry. 
+That communication infrastructure piece ends up eating a surprising amount of 
+engineering time, right?
+
+[00:02:44] PRIYA: It really does. We've probably spent—
+
+[00:02:46] MARCUS: It's necessary work though. We need to own that layer because 
+it touches our core systems.
+
+[00:02:52] JORDAN: Totally fair. And I think that instinct to own the strategic 
+pieces is exactly right. Can I ask — when you think about your team's capacity 
+over the next two quarters, how are you thinking about the split between building 
+new agent capabilities versus maintaining the communication infrastructure 
+underneath them?
+
+[00:03:10] MARCUS: [pause] It's always a balance. We've got a lot on the roadmap.
+
+[00:03:16] PRIYA: If I'm being honest, we're probably spending more time than 
+we'd like on the infrastructure side. The email parsing work alone has been a 
+two-sprint effort and we're still tuning it. And we haven't even started on SMS, 
+which the ops team has been asking about for months.
+
+[00:03:35] MARCUS: Look, I know where this is heading. You're going to tell me 
+Magic AI can handle email and SMS and we should let you expand scope. I'll save 
+you the pitch — I'm not interested in that. You guys do voice calls and you do 
+them fine. I don't see the need to change what's working.
+
+[00:03:55] JORDAN: I hear you, and I'm not going to push you somewhere you don't 
+want to go. Voice is where we're proving value and I respect that boundary. What I 
+actually wanted to talk about is making voice work better — because I think we're 
+leaving real performance on the table with the current setup.
+
+[00:04:12] MARCUS: Go on.
+
+[00:04:14] JORDAN: So right now, when our agent makes a Track & Trace call — 
+which is our biggest workflow at about 28,000 calls a month — it goes in 
+essentially blind. We have write-back access, which is great, we can update 
+CargoNet after the call. But we don't have any shipment context going in. We 
+don't know the pickup time, the load details, the carrier's communication 
+history. So the agent is starting every conversation from zero.
+
+[00:04:42] PRIYA: Right, I'm aware of that setup. It was intentional — we were 
+cautious about how much access to grant initially.
+
+[00:04:50] JORDAN: And that was absolutely the right call at the time. But here's 
+what it costs you in practice. Our Track & Trace success rate is 91%, which is 
+solid. But that remaining 9% — those are calls where we can't resolve the issue 
+because we don't have enough context. The carrier says something like "which 
+load?" or "I've got three pickups today, which one are you calling about?" and 
+our agent doesn't have the shipment details to answer. So those calls fail and 
+your ops team ends up re-calling manually. At 28,000 calls a month, 9% failure 
+is roughly 2,500 calls bouncing back to your people every month.
+
+[00:05:30] MARCUS: So what are you proposing?
+
+[00:05:33] JORDAN: A scoped 30-day pilot. Read access to a limited set of fields 
+for the Track & Trace workflow only. Shipment ID, pickup window, carrier name, 
+load details. Your team defines the API endpoint, sets the permissions, controls 
+exactly which fields are exposed and which aren't. We call the endpoint before 
+each Track & Trace call so the agent has context going in. We think that gets the 
+success rate from 91% to above 95%. That's roughly a thousand fewer calls per 
+month bouncing back to your operations team.
+
+[00:06:05] MARCUS: What does "read access" look like technically? We're talking 
+about hitting a CargoNet API?
+
+[00:06:12] PRIYA: We'd need to stand up a lightweight endpoint. It's not nothing, 
+but it's not massive either. We actually have a similar pattern for one of our 
+internal tools already.
+
+[00:06:22] JORDAN: And that's exactly the kind of thing I'd want your team to 
+own. I don't want to prescribe the architecture. If you've already got a pattern 
+that works, even better. The point is your team designs and controls the 
+integration — we're just consuming a read-only feed before each call.
+
+[00:06:38] MARCUS: Here's my concern. You start with read access on Track & 
+Trace. Then it's read access on Appointment Scheduling. Then Collections. Then 
+you're asking for write access to more fields. Then you want email. I've seen 
+this playbook before.
+
+[00:06:55] JORDAN: That's a completely fair concern and I want to address it 
+head-on. This pilot is self-contained. 30 days, one workflow, read-only, fields 
+your team defines. There's no automatic expansion. If it works and you see the 
+value, we have a conversation about what's next — and you have full veto over 
+whether that conversation even happens. I'd rather prove value in a controlled 
+way than ask you to take a leap of faith.
+
+[00:07:22] MARCUS: And the contract implications?
+
+[00:07:24] JORDAN: None. Same terms, same scope, same contract. We're just trying 
+to improve the performance of calls we're already making under the existing 
+agreement. And honestly — you're at about 70% utilization on contracted capacity 
+right now. My first priority is making sure you're getting full value out of what 
+you've already paid for before we talk about anything new.
+
+[00:07:46] MARCUS: [to Priya] What's your read on the engineering lift?
+
+[00:07:50] PRIYA: It's pretty light. If we reuse the pattern from the internal 
+tracking dashboard, we could have a scoped endpoint ready in a week, maybe two. 
+The main work would be defining the field-level permissions and setting up 
+monitoring. I'd want to see rate limiting and an audit log on every call they 
+make to the endpoint.
+
+[00:08:10] JORDAN: A hundred percent. And honestly, I'd welcome that. If your 
+team builds a monitoring dashboard around the API usage, that becomes a nice 
+proof point for you internally too. "We enabled a smarter integration and here's 
+exactly how it's being used, how it's performing, full transparency." That's your 
+team's win to present.
+
+[00:08:32] MARCUS: [pause] Let me think about this differently. Say we do this 
+pilot and it works. Success rate hits 95%. What does that actually mean for my 
+organization?
+
+[00:08:44] JORDAN: A few things. First, your ops team gets roughly a thousand 
+fewer manual callbacks per month on Track & Trace alone. That's real, measurable 
+labor savings. Second — and I think this matters more to you — it demonstrates 
+that a tighter integration between CargoNet and external execution layers 
+improves outcomes. That's a proof point your team can use for any integration, 
+not just ours. You're essentially validating an API-first architecture pattern 
+for external partners. Third, it makes the existing Magic AI investment perform 
+better, which looks good for everyone who approved it.
+
+[00:09:22] PRIYA: The API pattern angle is actually interesting. We've been 
+talking internally about building a more formalized external integration layer. 
+This could be a low-risk test case for that.
+
+[00:09:34] MARCUS: That's... not a bad framing. If we're treating this as testing 
+our own integration architecture, that has value independent of Magic AI.
+
+[00:09:45] JORDAN: Exactly. And that's how I'd encourage you to think about it. 
+Even if you decide Magic AI isn't the long-term answer — which is your call — 
+the integration pattern your team builds here is reusable. It's an investment in 
+your architecture, not in us.
+
+[00:10:02] MARCUS: Alright. Talk me through the security side. What happens with 
+the data you pull?
+
+[00:10:08] JORDAN: Good question. The data we'd pull is used in-memory for the 
+duration of the call only. We need the shipment context so the agent can have an 
+informed conversation. Once the call ends and we've written the outcome back to 
+CargoNet, the pre-call data is purged. We don't store it, we don't train on 
+it, we don't aggregate it. I'll put the full data handling policy in the spec 
+doc, but that's the short version.
+
+[00:10:35] PRIYA: What about in the event of a system failure mid-call? Does the 
+data persist in a queue somewhere?
+
+[00:10:42] JORDAN: Great question. In a failure scenario, any cached data is 
+flushed automatically — there's no persistent queue. Our architecture is 
+stateless for pre-call data. But I'll detail the exact failure modes and data 
+lifecycle in the technical spec so your team can poke holes in it.
+
+[00:11:00] MARCUS: What about SLA? If our endpoint goes down, what happens to 
+your calls?
+
+[00:11:06] JORDAN: We'd build in a graceful fallback. If the read call to your 
+API fails or times out, our agent makes the call the same way it does today — 
+without context. You don't lose any call volume, you just lose the performance 
+improvement for those calls. So the downside of an API outage is reverting to 
+current state, not a service interruption.
+
+[00:11:28] MARCUS: That's reasonable.
+
+[00:11:30] PRIYA: I'd want to define the timeout threshold. We should be aligned 
+on how long your system waits before falling back.
+
+[00:11:37] JORDAN: Absolutely. We can define that together. We'd recommend 
+something in the 2-3 second range but your team should set the parameter you're 
+comfortable with. I'll include it as a configurable value in the spec.
+
+[00:11:50] MARCUS: Okay. Here's what I'm going to need. And I mean a real 
+technical document, not a sales deck. I want to see the exact API calls you'd 
+make, the exact data fields you need, expected call volume to the endpoint, your 
+data handling and retention policy, security posture, the fallback behavior, the 
+teardown process if we kill the pilot, and what monitoring you'd want us to set 
+up on our side. I want my team to review this as engineers, not as buyers.
+
+[00:12:22] JORDAN: That's exactly what I'll put together. No marketing, no 
+fluff — a proper technical scope document. I'll have it to Priya by end of day 
+Friday.
+
+[00:12:32] MARCUS: Good. Priya, loop Raj in on the review. He owns the 
+integration layer and I want his eyes on it.
+
+[00:12:39] PRIYA: Will do.
+
+[00:12:41] JORDAN: And once your team has had a chance to read through it, would 
+it make sense for me to get on a 30-minute call with Raj to walk through any 
+questions? I'd rather hash out the technical details directly than go back and 
+forth over email.
+
+[00:12:54] PRIYA: Yeah, that'd be efficient. Let me get the doc first and then 
+I'll set that up.
+
+[00:13:00] MARCUS: Fine. But I want to be clear — reviewing the spec is not a 
+green light. We review it, we assess the lift, and then we decide whether it 
+makes sense.
+
+[00:13:11] JORDAN: Completely understood. And honestly, that's the right process. 
+If your team reviews it and says the lift isn't worth it or the security model 
+doesn't meet your standards, that's a valid outcome. I'd rather get a well-
+informed no than a reluctant yes.
+
+[00:13:27] MARCUS: [slight laugh] That's a refreshing thing to hear from a 
+vendor.
+
+[00:13:32] JORDAN: Ha — well, it's true. A pilot that your team doesn't believe 
+in is going to fail regardless. I'd rather earn the buy-in.
+
+[00:13:40] MARCUS: Fair enough.
+
+[00:13:43] JORDAN: One more thing, and this is more of a longer-term question — 
+not an ask. As your team continues building out the agent portfolio, have you 
+thought about what happens when those agents need to execute across channels? 
+Like when an email agent needs to trigger a follow-up phone call, or coordinate 
+a response across voice and email simultaneously?
+
+[00:14:05] MARCUS: It's on the roadmap but it's not a near-term problem. We're 
+focused on getting each channel right first.
+
+[00:14:13] JORDAN: Makes total sense. Just planting the seed that when you get 
+there, there might be a model where your agents use a communication 
+infrastructure layer as an API. Your team writes the logic, controls the 
+decisions — but when the agent needs to make a call, send a message, whatever — 
+it fires through a purpose-built communication layer. Your team gets full credit 
+for the agent. The communication execution is just plumbing underneath.
+
+[00:14:40] PRIYA: So like... our agent is the brain, and your platform is the 
+mouth?
+
+[00:14:45] JORDAN: That's a much better way to put it than I would have. Yeah, 
+exactly. But like I said — that's a future conversation. Let's see how Track & 
+Trace goes first.
+
+[00:14:56] MARCUS: Agreed. One thing at a time. Get me that spec and we'll go 
+from there.
+
+[00:15:03] JORDAN: Will do. Thanks again to both of you — I know this time is 
+valuable and I really appreciate the candor today. Priya, you'll have the doc 
+Friday. Marcus, I'll keep you in the loop on next steps once your team's had a 
+chance to review.
+
+[00:15:18] MARCUS: Sounds good.
+
+[00:15:20] PRIYA: Thanks Jordan.
+
+[00:15:22] JORDAN: Take care, both of you.
+
+[00:15:24] — Call ends.
+
+================================================================================

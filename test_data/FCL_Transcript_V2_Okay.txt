@@ -1,0 +1,228 @@
+================================================================================
+                         MOCK CALL TRANSCRIPT
+              Flying Carpet Logistics — VP of Technology Meeting
+                      VERSION 2: OKAY OUTCOME
+================================================================================
+
+Date:           March 26, 2026
+Duration:       30 minutes
+Format:         Video call (Microsoft Teams)
+
+PARTICIPANTS:
+  - Marcus Chen, VP of Technology, Flying Carpet Logistics
+  - Priya Kapoor, Director of Technology, Flying Carpet Logistics (Marcus's direct report)
+  - Jordan Ellis, Deployment Strategist, Magic AI
+
+================================================================================
+
+[00:00:00] JORDAN: Hey Marcus, Priya — thanks for making time today. Appreciate 
+you both jumping on.
+
+[00:00:06] MARCUS: Sure. What's on the agenda?
+
+[00:00:09] JORDAN: I wanted to check in on how things are going from your team's 
+perspective and make sure we've got good alignment on where the integration 
+stands. But before I get into anything on our side, I'd love to hear what's top 
+of mind for your team right now. I know you've got a lot going on with the AI 
+roadmap.
+
+[00:00:28] MARCUS: Yeah, we do. We're heads down on our internal agent buildout. 
+the CEO's been pretty clear that the technology org owns the AI strategy, and we've 
+got about 30 agents in various stages across the shipment lifecycle. Priya's 
+leading the email automation work. We're in a good rhythm.
+
+[00:00:48] JORDAN: That's great. Priya, how are the email agents coming along?
+
+[00:00:53] PRIYA: Good. We've got three in production now — appointment 
+confirmations, shipper status updates, and claims documentation. There are some 
+rough edges on the email parsing side but we're iterating.
+
+[00:01:07] JORDAN: Nice. What's been the trickiest part? The parsing itself or 
+more the deliverability and infrastructure side?
+
+[00:01:14] PRIYA: Both, honestly. Carrier emails are a mess — no standard format, 
+half of them reply inline, attachments everywhere. And then we've had some 
+deliverability issues. It's a lot of plumbing work.
+
+[00:01:28] MARCUS: It's work we need to own though. It's core to our stack.
+
+[00:01:33] JORDAN: For sure. I'm curious — as you're building out these agents 
+internally, how are you thinking about the communication infrastructure layer? 
+Like, is that something your engineers are building from scratch for each channel, 
+or is there a shared layer underneath?
+
+[00:01:50] MARCUS: We're building it channel by channel for now. We'll abstract 
+it later if we need to. Why do you ask?
+
+[00:01:58] JORDAN: Mostly just trying to understand the landscape. I want to make 
+sure what we're doing on the voice side fits cleanly into how you're thinking 
+about the broader architecture. I don't want to be a disconnected silo.
+
+[00:02:12] MARCUS: Well, right now voice is your domain and everything else is 
+ours. That's a pretty clean line. I'd like to keep it that way.
+
+[00:02:21] JORDAN: Understood. And I'm not here to blur that line. Actually, I 
+wanted to talk about making voice specifically work better within the current 
+setup. Can I walk you through something we've been seeing in the data?
+
+[00:02:35] MARCUS: Go ahead.
+
+[00:02:37] JORDAN: So Track & Trace is our biggest workflow — about 28,000 calls 
+a month. We're at a 91% success rate, which is solid. But the 9% that fail — 
+those are almost entirely calls where we don't have enough shipment context going 
+in. The agent calls a carrier and the carrier says "which load?" and we can't 
+answer because we don't have read access to the shipment details. Those calls 
+bounce back to your ops team for manual follow-up. That's roughly 2,500 calls a 
+month that need a human re-call.
+
+[00:03:12] MARCUS: So you want read access to CargoNet.
+
+[00:03:15] JORDAN: A very scoped version of it, yeah. My thinking was a 30-day 
+pilot — read-only access to a limited set of fields on Track & Trace shipments 
+only. Your team defines the endpoint, controls the fields, monitors everything. 
+We think it gets the success rate north of 95%.
+
+[00:03:35] MARCUS: [pause] I've got to be honest with you, I'm not thrilled 
+about opening up CargoNet access to external vendors. Even read-only. That's 
+our core system. Every integration point is a potential attack surface and a 
+dependency I have to manage.
+
+[00:03:52] JORDAN: That's a totally valid concern. Security is—
+
+[00:03:55] MARCUS: It's not just security. It's about scope. Today it's read 
+access for Track & Trace. Six months from now it's read-write across every 
+workflow. A year from now you're so embedded that we can't make a TMS change 
+without checking if it breaks your integration. I've been in this industry long 
+enough to know how that story ends.
+
+[00:04:15] JORDAN: I hear you. And I won't pretend that concern is unfounded — 
+you've probably seen it happen. What I'd want to propose is a pilot that's 
+specifically designed to address that. Thirty days, hard stop. One workflow. 
+Read-only. If at day 30 you decide it's not worth it, your team turns off the 
+endpoint and we're back to current state. No dependencies to unwind.
+
+[00:04:40] MARCUS: [to Priya] What do you think?
+
+[00:04:43] PRIYA: I mean... the engineering lift would be pretty light. We've got 
+a similar pattern already for the internal tracking tool. I could see Raj having 
+something ready in a week or two. The 2,500 calls bouncing back to ops is a real 
+number — I've heard Sarah's team complain about it.
+
+[00:05:02] MARCUS: It's a real number, but it's not a crisis. Ops has been 
+handling it. I'm not sure this is the highest-priority thing for my team to 
+spend cycles on right now.
+
+[00:05:13] JORDAN: That's fair. If I can offer one other way to think about it — 
+your team has been talking about building a more formalized external integration 
+layer, right? This could be a low-risk test case for that pattern. Even if you 
+decide Magic AI isn't the long-term play, the API architecture your team builds 
+is reusable for any external partner.
+
+[00:05:35] MARCUS: Who told you we're building an integration layer?
+
+[00:05:38] JORDAN: I — sorry, I may have that wrong. I was inferring based on the 
+direction you described with the agent buildout. As you scale to more partners 
+and more channels, a standardized integration pattern seems like a natural next 
+step. But I don't want to put words in your mouth.
+
+[00:05:55] MARCUS: [pause] It's something we've discussed internally. But it's 
+not on the near-term roadmap.
+
+[00:06:02] PRIYA: It has come up a few times though. The partner integration 
+question keeps surfacing.
+
+[00:06:08] MARCUS: [to Priya] Let's not get ahead of ourselves. [to Jordan] 
+Look, here's where I am. I'm not opposed to the concept of improving Track & 
+Trace performance. I'm cautious about opening up CargoNet access. Those are 
+two different things.
+
+[00:06:25] JORDAN: Totally. What if there were a way to get the agent shipment 
+context without direct CargoNet access? Like, your team could push a data 
+payload to us before each batch of calls. A flat file, a webhook, whatever 
+format you're comfortable with. It would be less real-time than an API call, 
+but it would still give us more context than we have today.
+
+[00:06:50] MARCUS: A push model instead of a pull model.
+
+[00:06:53] JORDAN: Exactly. You control when and what data leaves your system. 
+We never touch CargoNet directly. It's a more conservative approach but it 
+might get you comfortable enough to test the hypothesis.
+
+[00:07:06] MARCUS: [thinking] That's... less concerning from a security 
+perspective. Priya, what would that look like?
+
+[00:07:14] PRIYA: Pretty straightforward. We could set up a nightly batch or even 
+an event-driven webhook when a Track & Trace call gets queued. Strip it down to 
+just the fields they need. I'd want to review what fields are actually necessary 
+though.
+
+[00:07:30] JORDAN: We can provide that list. It'd be minimal — shipment ID, 
+pickup window, carrier name, load type. Enough for the agent to answer "which 
+load?" when a carrier asks.
+
+[00:07:42] MARCUS: Alright. I'm not committing to anything. But you can send 
+Priya the list of fields you'd need and we'll assess whether a push model is 
+feasible. If the lift is trivial and the data exposure is minimal, maybe we 
+look at it. But I want to be clear — I'm not opening an API endpoint into 
+CargoNet for you. If we do anything, it's on our terms, pushed from our side.
+
+[00:08:10] JORDAN: That's completely fair and honestly, if the push model gets us 
+even 80% of the improvement with less risk for your team, that's a win. I'll 
+send Priya the field list and some context on how we'd use each one. Would end 
+of week work?
+
+[00:08:27] PRIYA: Yeah, that's fine. I'll take a look and loop in Raj if it 
+seems worth exploring.
+
+[00:08:33] JORDAN: Great. And Marcus — I want to pivot for a second if that's 
+okay. Separate from the integration question, I want to make sure you're getting 
+full value from the current setup. You're at about 70% utilization on contracted 
+capacity. Are there workflows where you're not sending us calls that you could 
+be?
+
+[00:08:53] MARCUS: Honestly, I haven't been tracking utilization. Priya, do you 
+have visibility into that?
+
+[00:08:59] PRIYA: Not directly — that's more on the ops side. I know Sarah's 
+team manages the call queues. We could probably push more volume through 
+Appointment Scheduling, but I don't know the specifics.
+
+[00:09:12] JORDAN: Would it be helpful if I put together a utilization report 
+and shared it with both you and the ops team? Not a sales pitch — just a 
+transparent look at where you have unused capacity and where pushing more volume 
+could reduce manual work. You're paying for the capacity either way.
+
+[00:09:30] MARCUS: Sure, that's fine. Send it to Priya and she can share 
+internally as she sees fit.
+
+[00:09:37] JORDAN: Will do. Okay, one last thing and then I'll give you your 
+time back. As your team is building out the agent ecosystem, I'd just flag that 
+there may come a point where your agents need to execute across channels. Like 
+when an email agent needs to trigger a phone call as a follow-up. If that ever 
+comes up, we have infrastructure that could serve as the execution layer 
+underneath your agents — your team writes the logic, we handle the communication 
+mechanics. But that's a future conversation, not an ask for today.
+
+[00:10:08] MARCUS: Noted. But for now, let's keep things where they are. We're 
+not looking to expand vendor scope.
+
+[00:10:16] JORDAN: Understood. So to recap — I'll send Priya the field list for 
+the Track & Trace context by end of week, and separately a utilization report 
+for the current workflows. Sound right?
+
+[00:10:28] PRIYA: Yep, works for me.
+
+[00:10:30] MARCUS: Fine. Anything else?
+
+[00:10:33] JORDAN: Nope, that's it. Thanks for the time, both of you. Really 
+appreciate the candor.
+
+[00:10:38] MARCUS: Sure. Talk later.
+
+[00:10:40] PRIYA: Thanks Jordan.
+
+[00:10:42] JORDAN: Take care.
+
+[00:10:44] — Call ends.
+
+================================================================================
