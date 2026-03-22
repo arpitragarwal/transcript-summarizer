@@ -3,18 +3,26 @@
 import { useCallback, useState } from "react";
 import type { TranscriptAnalysis } from "@/lib/transcript-schema";
 
+function formatTs(ts: string | null): string {
+  return ts?.trim() ? ts.trim() : "—";
+}
+
 function toMarkdown(data: TranscriptAnalysis): string {
   const lines: string[] = [
     "## Pain points (customer)",
-    ...data.pain_points.map((p) => `- ${p}`),
+    ...data.pain_points.map(
+      (p) => `- **${formatTs(p.timestamp)}** ${p.text}`,
+    ),
     "",
     "## Questions asked by customer",
-    ...data.customer_questions.map((q) => `- ${q}`),
+    ...data.customer_questions.map(
+      (q) => `- **${formatTs(q.timestamp)}** ${q.text}`,
+    ),
     "",
     "## Action items",
     ...data.action_items.map((a) => {
       const owner = a.owner?.trim() ? a.owner : "Unassigned";
-      return `- **${owner}**: ${a.task}`;
+      return `- **${formatTs(a.timestamp)}** **${owner}**: ${a.task}`;
     }),
   ];
   return lines.join("\n");
@@ -107,7 +115,9 @@ export default function Home() {
                 Output:
               </span>{" "}
               Customer pain points, questions they asked, and action items with
-              owners when the transcript names them.
+              owners when the transcript names them. Each row includes a
+              transcript timestamp when the file has time markers, so you can
+              jump back for context.
             </p>
           </div>
         </header>
@@ -170,11 +180,33 @@ export default function Home() {
               {result.pain_points.length === 0 ? (
                 <p className="text-sm text-neutral-500">None identified.</p>
               ) : (
-                <ul className="list-inside list-disc space-y-1 text-sm">
-                  {result.pain_points.map((p, i) => (
-                    <li key={i}>{p}</li>
-                  ))}
-                </ul>
+                <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
+                  <table className="w-full border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/80">
+                        <th className="w-[7.5rem] shrink-0 px-3 py-2 text-left font-semibold">
+                          Time
+                        </th>
+                        <th className="px-3 py-2 text-left font-semibold">
+                          Pain point
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.pain_points.map((row, i) => (
+                        <tr
+                          key={i}
+                          className="border-b border-neutral-100 last:border-0 dark:border-neutral-800"
+                        >
+                          <td className="whitespace-nowrap px-3 py-2 align-top font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                            {row.timestamp?.trim() || "—"}
+                          </td>
+                          <td className="px-3 py-2">{row.text}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
 
@@ -185,11 +217,33 @@ export default function Home() {
               {result.customer_questions.length === 0 ? (
                 <p className="text-sm text-neutral-500">None identified.</p>
               ) : (
-                <ul className="list-inside list-disc space-y-1 text-sm">
-                  {result.customer_questions.map((q, i) => (
-                    <li key={i}>{q}</li>
-                  ))}
-                </ul>
+                <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
+                  <table className="w-full border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/80">
+                        <th className="w-[7.5rem] shrink-0 px-3 py-2 text-left font-semibold">
+                          Time
+                        </th>
+                        <th className="px-3 py-2 text-left font-semibold">
+                          Question
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.customer_questions.map((row, i) => (
+                        <tr
+                          key={i}
+                          className="border-b border-neutral-100 last:border-0 dark:border-neutral-800"
+                        >
+                          <td className="whitespace-nowrap px-3 py-2 align-top font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                            {row.timestamp?.trim() || "—"}
+                          </td>
+                          <td className="px-3 py-2">{row.text}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
 
@@ -204,6 +258,9 @@ export default function Home() {
                   <table className="w-full border-collapse text-sm">
                     <thead>
                       <tr className="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/80">
+                        <th className="w-[7.5rem] shrink-0 px-3 py-2 text-left font-semibold">
+                          Time
+                        </th>
                         <th className="px-3 py-2 text-left font-semibold">
                           Owner
                         </th>
@@ -218,6 +275,9 @@ export default function Home() {
                           key={i}
                           className="border-b border-neutral-100 last:border-0 dark:border-neutral-800"
                         >
+                          <td className="whitespace-nowrap px-3 py-2 align-top font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                            {row.timestamp?.trim() || "—"}
+                          </td>
                           <td className="px-3 py-2 align-top text-neutral-700 dark:text-neutral-300">
                             {row.owner?.trim() || "—"}
                           </td>

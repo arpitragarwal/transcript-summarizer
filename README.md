@@ -1,14 +1,14 @@
 # Transcript summarizer
 
-A small web app for **call transcripts**: you paste or upload text, and the app returns **customer pain points**, **questions the customer asked**, and **action items** (with **owner** when the transcript assigns one).
+A small web app for **call transcripts**: you paste or upload text, and the app returns **customer pain points**, **questions the customer asked**, and **action items** (with **owner** when the transcript assigns one). Each item includes a **timestamp** when the transcript has time markers, so you can find the moment in the source text.
 
 ## How it works
 
 1. **Input** — The browser sends the transcript text to a **server-side API route** (`POST /api/summarize`). Nothing sensitive to deployment should live in client-side code; the API key stays on the server (or in the host’s environment variables).
 
-2. **Processing** — That route calls a **language model** with a fixed **structured output schema** (validated with Zod). The model fills in three lists: pain points, customer questions, and action items with optional owners.
+2. **Processing** — That route calls a **language model** with a fixed **structured output schema** (validated with Zod). The model fills three lists: pain points and questions as `{ text, timestamp }`, and action items as `{ task, owner, timestamp }` (timestamps are `null` if the transcript has no time markers).
 
-3. **Output** — The API returns JSON; the page renders three sections and can **copy results as Markdown**.
+3. **Output** — The API returns JSON; the page renders three sections (with time columns) and can **copy results as Markdown**.
 
 ```mermaid
 flowchart LR

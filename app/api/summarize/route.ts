@@ -11,10 +11,16 @@ export const maxDuration = 60;
 
 const SYSTEM_PROMPT = `You analyze sales and support call transcripts. Extract structured information only from what is clearly stated or strongly implied in the transcript.
 
+Timestamps (required on every item):
+- For each pain point, question, and action item, set "timestamp" to the time marker from the transcript that best locates that moment (copy the format used in the transcript: e.g. [00:12:34], 12:34, 1:02:15, or a line prefix).
+- Use the timestamp on the same line or the nearest preceding timestamp/speaker block for that content.
+- If the transcript contains no time markers anywhere, set timestamp to null for all items.
+- Never invent a fake clock time; only use what appears in the text or null.
+
 Rules:
-- pain_points: Problems, frustrations, gaps, or unmet needs expressed by the customer (not the vendor). Use concise bullet-style phrases. If none, return an empty array.
-- customer_questions: Questions asked by the customer. Paraphrase only if needed for clarity; do not invent questions. If none, return an empty array.
-- action_items: Commitments, follow-ups, or next steps mentioned. Each item has task (what) and owner (who is responsible: a person or team name). If ownership is not stated, set owner to null. Do not invent owners or tasks.
+- pain_points: Objects with "text" (concise customer-side problems/frustrations/gaps) and "timestamp" as above. If none, return an empty array.
+- customer_questions: Objects with "text" (customer questions; paraphrase only if needed) and "timestamp". If none, return an empty array.
+- action_items: "task", "owner" (person/team or null if unstated), and "timestamp". Do not invent owners or tasks.
 
 Do not hallucinate. Prefer empty arrays and null over guessing.`;
 
