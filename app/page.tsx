@@ -119,6 +119,21 @@ export default function Home() {
               transcript timestamp when the file has time markers, so you can
               jump back for context.
             </p>
+            <p>
+              <span className="font-medium text-neutral-800 dark:text-neutral-200">
+                Try it:
+              </span>{" "}
+              Sample transcripts live in the repo’s{" "}
+              <a
+                href="https://github.com/arpitragarwal/transcript-summarizer/tree/main/test_data"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-neutral-900 underline underline-offset-2 hover:text-neutral-700 dark:text-neutral-100 dark:hover:text-neutral-300"
+              >
+                test_data
+              </a>{" "}
+              folder — open a file, copy the text, and paste here.
+            </p>
           </div>
         </header>
 
