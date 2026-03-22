@@ -6,7 +6,8 @@ import {
   transcriptAnalysisSchema,
 } from "@/lib/transcript-schema";
 
-export const maxDuration = 120;
+/** Vercel Hobby caps serverless time at 60s; raise this on Pro if you need longer runs. */
+export const maxDuration = 60;
 
 const SYSTEM_PROMPT = `You analyze sales and support call transcripts. Extract structured information only from what is clearly stated or strongly implied in the transcript.
 
@@ -68,7 +69,7 @@ export async function POST(request: Request) {
 
   const openai = new OpenAI({
     apiKey,
-    timeout: 120_000,
+    timeout: 58_000,
     maxRetries: 1,
   });
 
