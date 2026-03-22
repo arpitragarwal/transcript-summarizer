@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Transcript summarizer
 
-## Getting Started
+A small web app for **call transcripts**: you paste or upload text, and the app returns **customer pain points**, **questions the customer asked**, and **action items** (with **owner** when the transcript assigns one).
 
-First, run the development server:
+## How it works
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. **Input** — The browser sends the transcript text to a **server-side API route** (`POST /api/summarize`). Nothing sensitive to deployment should live in client-side code; the API key stays on the server (or in the host’s environment variables).
+
+2. **Processing** — That route calls a **language model** with a fixed **structured output schema** (validated with Zod). The model fills in three lists: pain points, customer questions, and action items with optional owners.
+
+3. **Output** — The API returns JSON; the page renders three sections and can **copy results as Markdown**.
+
+```mermaid
+flowchart LR
+  subgraph browser [Browser]
+    UI[Page_upload_paste_and_results]
+  end
+  subgraph nextServer [Next_js_server]
+    API["POST_/api/summarize"]
+  end
+  subgraph modelApi [Model_API]
+    LLM[Structured_JSON_response]
+  end
+  UI -->|"transcript_JSON"| API
+  API -->|"prompt_schema"| LLM
+  LLM -->|"pain_points_questions_action_items"| API
+  API -->|"JSON"| UI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project layout
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Area | Role |
+|------|------|
+| `app/page.tsx` | Upload / paste UI, loading and errors, result sections |
+| `app/api/summarize/route.ts` | Validates input, size limits, calls the model, returns JSON |
+| `lib/transcript-schema.ts` | Zod schema and max transcript size constant |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Optional: **Vercel Web Analytics** is wired in `app/layout.tsx` (`@vercel/analytics`); enable it in the Vercel project dashboard.
 
-## Learn More
+## Local development
 
-To learn more about Next.js, take a look at the following resources:
+**Requirements:** Node.js 20.x (see `package.json` `engines`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Install dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+2. Configure the server key (not committed to git):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   cp .env.example .env.local
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Set `OPENAI_API_KEY` in `.env.local`.
+
+3. Run the dev server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Production
+
+Deploy on **Vercel** (or any Node host): set `OPENAI_API_KEY` in the provider’s **environment variables** and redeploy. The API route uses a bounded execution time suitable for typical serverless limits; very long transcripts may need longer timeouts or a paid tier on the host.
+
+## Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Development server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Run production server locally |
+| `npm run lint` | ESLint |

@@ -94,10 +94,22 @@ export default function Home() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Transcript summarizer
           </h1>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Paste a call transcript or upload a .txt file. Results are extracted
-            via OpenAI on the server (your API key stays server-side).
-          </p>
+          <div className="space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <p>
+              <span className="font-medium text-neutral-800 dark:text-neutral-200">
+                Input:
+              </span>{" "}
+              A call transcript — paste the text or upload a{" "}
+              <span className="whitespace-nowrap">.txt</span> file.
+            </p>
+            <p>
+              <span className="font-medium text-neutral-800 dark:text-neutral-200">
+                Output:
+              </span>{" "}
+              Customer pain points, questions they asked, and action items with
+              owners when the transcript names them.
+            </p>
+          </div>
         </header>
 
         <section className="flex flex-col gap-3">

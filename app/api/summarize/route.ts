@@ -104,7 +104,7 @@ export async function POST(request: Request) {
     return NextResponse.json(parsed);
   } catch (err: unknown) {
     const message =
-      err instanceof Error ? err.message : "OpenAI request failed.";
+      err instanceof Error ? err.message : "Analysis request failed.";
     return NextResponse.json({ error: message }, { status: 502 });
   }
 }
